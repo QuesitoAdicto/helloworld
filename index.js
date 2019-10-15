@@ -1,45 +1,29 @@
-const express= require('express');
-const bodyparser= require('body-parser');
+const bodyParser = require('body-parser');
+const express = require('express');
+const morgan = require('morgan');
+const pokemon = require('./routes/pokemon');
+const notFoundHandler = require('./middleware/notFoundHandler');
 const app = express();
-const pokedex= require('./pokedex.json');
-var datos = [];
-var Persona = {};
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended:true}));
-app.get("/", (req, res) =>{
-    console.log(req);
-    res.send("Bienvenido al pokedex");
-});
-app.get("/pokedex", (req, res) =>{
-    res.send(pokedex.pokemon);
-});
-app.get("/pokemon", (req, res) =>{
-    res.json(req.body.x);
-});
 
-app.post("/pokemon", (req, res) =>{
-    res.json({message:"Post a /pokemon"});
-});
-  app.get("/pokedex/id/:id([0-9]{1,3})", (req, res) =>{
-    res.send(200);
-    var dato = req.params.id;
-	  res.send(pokedex.pokemon[dato-1]);
-  });
-  app.get("/pokedex/name/:name([A-Za-z]+)", (req, res) =>{
-  });
-  app.get("/pokedex/\\brandom\\b", (req, res) =>{
-    var dato = Math.floor(Math.random() * 151);
-	  res.send(pokedex.pokemon[dato]);
-    });
-  app.get("/pokedex/image/:id([0-9]{1.3})", (req, res) =>{
-    var dato = req.params.id;
-    const img=pokedex.pokemon[dato-1].img;
-     res.send("<img src='"+img+"'/>");
-    });
-    app.use((req, res) =>{
-        res.status(404);
-        res.json({"404": "No existe la pagina"})
-    });
-app.listen(3000, () =>{
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/pokemon", pokemon);
+app.use(notFoundHandler);
+
+app.listen(3000, () => {
     console.log("Server is running...");
 });
+
+//const db = require('./config/database');
+// app.get("/test", (req, res) => {
+//     db.query("SELECT * FROM pokemon").then((rows)=>{
+//         res.status(200);
+//         res.send(rows);
+//     }).catch((err) => {
+//         res.status(500);
+//         res.send('Algo salió mal');
+//         console.log(err);
+//     });
+// });
