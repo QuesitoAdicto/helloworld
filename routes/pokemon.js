@@ -27,8 +27,8 @@ pokemon.post("/", (req, res) => {
         res.send("Ocurrió un error al añadir el pokemon");
     });
 });
-pokemon.get("/:id([0-9]{1,3})", (req, res) => {
-    const query = `DELETE * FROM pokemon WHERE pok_id=$(req.params.id)`;
+pokemon.delete("/:id([0-9]{1,3})", (req, res) => {
+    const query = `DELETE FROM pokemon WHERE pok_id=${req.params.id}`;
     db.query(query).then(rows => {
         res.status(200);
         res.json(rows);
