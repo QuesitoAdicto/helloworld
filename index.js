@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
 const pokemon = require('./routes/pokemon');
+const user = require('./routes/user');
 const moves = require('./routes/moves');
 const notFoundHandler = require('./middleware/notFoundHandler');
 const corsHandler = require('./middleware/corsHandler')
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/pokemon", pokemon);
+app.use("/user", user);
 app.use("/moves", moves);
 app.use(notFoundHandler);
 
